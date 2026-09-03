@@ -288,25 +288,16 @@ fn progress(bar_width: I64, batch_every: I64) -> Callback {
 
 # ---- ordering -------------------------------------------------------------
 
-# An insertion sort by (order, original index). Insertion sort because a
-# callback list is under ten entries, and stable because the tie-break is the
-# documented one.
-fn ordered(cbs: Arr[Callback]) -> Arr[Callback] {
-  let out: Arr[Callback] = []
-  let i = 0
-  while i < len(cbs) {
-    push(out, cbs[i])
-    let j = len(out) - 1
-    while j > 0 and out[j - 1].order > out[j].order {
-      let tmp = out[j - 1]
-      out[j - 1] = out[j]
-      out[j] = tmp
-      j = j - 1
-    }
-    i = i + 1
-  }
-  out
-}
+# Ordered by `order`, through the builtin's comparison (twill 1.9.0).
+#
+# This was an insertion sort, chosen because a callback list is under ten
+# entries and because it is stable: the tie-break for two callbacks with the
+# same `order` is the position they were added in, and that is documented rather
+# than incidental. The builtin is stable in every form, so the tie-break is the
+# same one, and it is now a property of the language rather than of a loop
+# written here.
+fn ordered(cbs: Arr[Callback]) -> Arr[Callback] =
+  sort(cbs, fn(a: Callback, b: Callback) -> Bool { a.order < b.order })
 
 # The two ordering rules, checked once at the start of a run instead of trusted.
 # Returns an error string, empty when the set is sound.

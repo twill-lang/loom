@@ -232,11 +232,14 @@ meter. The whole shape of this codebase assumes the reference answer.
 ### 11. A generic sort or a comparison-function parameter
 
 **Would improve:** `src/callback.tw` (`ordered`)
-**Status:** no generic sort; see entry 3 for function parameters.
+**Status: delivered in twill 1.9.0, and taken up.** `sort` takes a comparison,
+so `ordered` is the one line this entry predicted:
+`sort(cbs, fn(a, b) = a.order < b.order)`.
 
-`ordered` is an insertion sort by `(order, index)` written out by hand. It is
-correct and it is eleven lines that a `sort_by` would make one. spool has four
-copies of the same problem, which makes five in the ecosystem.
+The eleven hand-written lines were an insertion sort by `(order, index)`,
+correct and stable. The builtin is stable in every form, so the tie-break for
+two callbacks sharing an `order` is still the position they were added in, and
+it is now the language's property rather than this loop's.
 
 ### 12. `Dict` values that are not scalars
 
