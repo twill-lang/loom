@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+### The suites are written with `std/test`
+
+`tests/harness.tw` is deleted. It was the copy of the same harness that loom,
+spool and shuttle each carried, and `docs/needs.md` entry 15 said a `std/test`
+was what would delete it. twill 1.11 shipped one, so every `*_test.tw` under
+`tests/` imports `"std/test"` and calls the same four assertions by the same
+names. The suites print the summary in the form `twill test` reads, and the
+eight of them pass on twill 1.12.0.
+
+The pin moved from 1.9.0 to 1.12.0 in `spool.toml` and in CI, and the README
+says the floor is 1.11.0, because that is the release with the module.
+
 ## v0.1.0 (unreleased)
 
 First cut of loom, the training framework for twill, written in twill.

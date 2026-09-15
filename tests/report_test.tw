@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/report.tw" as rep
 import "std/term/caps" as cp
 import "../src/state.tw" as st

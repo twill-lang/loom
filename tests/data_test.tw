@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/data.tw" as dt
 
 fn a_short_final_batch_is_counted_not_dropped() {

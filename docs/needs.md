@@ -287,11 +287,21 @@ whole body instead.
 fresh interpreter and reports once, which is exactly what this entry asked for.
 CI calls it and so does the README.
 
-`tests/harness.tw` is not gone. `twill test` reports a file as passed or failed
-and the harness is what names the individual assertions inside one, so the two
-are complementary rather than one replacing the other. The duplication this
-entry complained about, the same harness in loom and in spool, is unchanged, and
-what would close it is a `std/test` rather than the runner.
+`tests/harness.tw` is gone. twill 1.11 shipped `std/test`, which is the other
+half of the runner: the runner names the file that failed and `std/test` names
+the assertion inside it, and it prints the summary in the shape the runner
+reads, `<suite> passed <p> failed <f>` and then `OK` or `FAILED`. Every suite
+under `tests/` imports it, and the copy of the harness this entry complained
+about, the same file in loom, spool and shuttle, is one fewer. The four names
+the suites call, `check`, `equal_str`, `equal_i64` and `near`, are the same
+names with the same signatures, so no assertion changed; `near` still takes the
+tolerance and never defaults it, which is the one property the copy was written
+to keep.
+
+What it said while the harness was still here: `twill test` reports a file as
+passed or failed and the harness is what names the individual assertions inside
+one, so the two are complementary rather than one replacing the other, and what
+would close the duplication is a `std/test` rather than the runner.
 
 ### 16. Timing, for the progress estimate
 

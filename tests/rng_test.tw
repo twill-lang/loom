@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/rng.tw" as rng
 
 fn an_epoch_seed_depends_only_on_the_base_and_the_epoch() {

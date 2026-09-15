@@ -5,7 +5,7 @@ mode systems
 # correct one on every healthy step, so these tests manufacture the overflow
 # and check what happens to the step, the scale and the reported loss.
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/precision.tw" as prec
 import "../src/trainer.tw" as tr
 import "../src/state.tw" as st

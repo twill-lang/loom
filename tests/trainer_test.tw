@@ -5,7 +5,7 @@ mode systems
 # resumable, which is the only claim loom makes that a hand-written loop does
 # not already satisfy.
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/trainer.tw" as tr
 import "../src/state.tw" as st
 import "../src/data.tw" as dt
