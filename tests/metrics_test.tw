@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/metrics.tw" as met
 
 # The test this file exists for. Three batches of 4 and one of 2, and the short

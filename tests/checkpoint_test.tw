@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/checkpoint.tw" as ckpt
 import "../src/state.tw" as st
 

@@ -1,6 +1,6 @@
 mode systems
 
-import "harness.tw" as t
+import "std/test" as t
 import "../src/callback.tw" as cb
 import "../src/state.tw" as st
 import "../src/metrics.tw" as met
