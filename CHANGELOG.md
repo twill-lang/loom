@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Take twill 1.13.0
+
+twill 1.13.0 is released, so the pin follows it. `spool.toml`, CI and the
+README install line move from 1.12.0 to 1.13.0. The floor stays 1.11.0, the
+release with `std/test`; this is a currency bump, so no source or test changed
+and the eight suites pass unchanged on 1.13.0.
+
 ### The suites are written with `std/test`
 
 `tests/harness.tw` is deleted. It was the copy of the same harness that loom,
