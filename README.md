@@ -58,19 +58,19 @@ And the example, which trains a three-class MLP and stops early:
 
 ```
 $ twill run examples/classifier.tw
-epoch  1/60  loss 1.0444  lr 0.002500  val_loss 0.9346  val_accuracy 0.5972
-epoch  2/60  loss 0.6686  lr 0.005000  val_loss 0.5529  val_accuracy 0.8611
-epoch  3/60  loss 0.3440  lr 0.007500  val_loss 0.3083  val_accuracy 0.9306
+epoch  1/60  loss 1.0545  lr 0.002500  val_loss 0.8859  val_accuracy 0.5417
+epoch  2/60  loss 0.6902  lr 0.005000  val_loss 0.5007  val_accuracy 0.9306
+epoch  3/60  loss 0.3646  lr 0.007500  val_loss 0.2548  val_accuracy 0.9583
 ...
-epoch 15/60  loss 0.0208  lr 0.009127  val_loss 0.1256  val_accuracy 0.9583
-stopped: accuracy has not improved for 9 evaluations; best was 0.9583 at epoch 6
-trained 15 epochs
+epoch 12/60  loss 0.0295  lr 0.009531  val_loss 0.0866  val_accuracy 0.9444
+stopped: accuracy has not improved for 9 evaluations; best was 0.9583 at epoch 3
+trained 12 epochs
 best parameters are in runs/blobs.ckpt.best
 parameters for selvedge are in runs/blobs.params
-held-out accuracy 0.958333
+held-out accuracy 0.944444
 ```
 
-The elided lines are a per-epoch progress bar and epochs 4 to 14. It writes
+The elided lines are a per-epoch progress bar and epochs 4 to 11. It writes
 into `examples/runs/`, which it creates.
 
 `docs/needs.md` is still worth reading -- it is the list of what this library
@@ -186,15 +186,15 @@ let pred = tr.predict(run.params, val.x, 64, logits)
 Output, one line per epoch. This is the run above, not a sketch of one:
 
 ```
-epoch  1/60  loss 1.0444  lr 0.002500  val_loss 0.9346  val_accuracy 0.5972
-epoch  2/60  loss 0.6686  lr 0.005000  val_loss 0.5529  val_accuracy 0.8611
+epoch  1/60  loss 1.0545  lr 0.002500  val_loss 0.8859  val_accuracy 0.5417
+epoch  2/60  loss 0.6902  lr 0.005000  val_loss 0.5007  val_accuracy 0.9306
 ...
-epoch 15/60  loss 0.0208  lr 0.009127  val_loss 0.1256  val_accuracy 0.9583
-stopped: accuracy has not improved for 9 evaluations; best was 0.9583 at epoch 6
+epoch 12/60  loss 0.0295  lr 0.009531  val_loss 0.0866  val_accuracy 0.9444
+stopped: accuracy has not improved for 9 evaluations; best was 0.9583 at epoch 3
 ```
 
-Sixty epochs were budgeted and fifteen were run, because on three well separated
-blobs the accuracy reaches its ceiling in six and early stopping is doing its
+Sixty epochs were budgeted and twelve were run, because on three well separated
+blobs the accuracy reaches its ceiling in three and early stopping is doing its
 job. `examples/classifier.tw` is the same program, complete.
 
 ## Callback ordering

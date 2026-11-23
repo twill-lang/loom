@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### `data.split` no longer moves the global generator
+
+`split` said it did not consume the epoch stream, but it reseeded the global
+generator and left it at the split's position, so whatever drew next drew
+something that depended on whether a split had happened. It now draws its
+permutation from a `std/random` generator of its own, seeded from the same
+derived tag, and `tests/data_test.tw` checks that the draw after a split is the
+draw without one. The test fails on the previous `split`.
+
+A given seed now selects different validation rows, because the permutation
+comes from a different stream. The example's run changed with it (twelve
+epochs, held-out accuracy 0.944444) and both README blocks are the new run.
+`docs/needs.md` entry 6 records the take-up and corrects its list of handle
+draws: `rng_uniform`, `rng_normal` and `rng_perm` use the global stream.
+
 ### Take twill 1.13.0
 
 twill 1.13.0 is released, so the pin follows it. `spool.toml`, CI and the

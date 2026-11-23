@@ -130,14 +130,25 @@ checkpoints written before this survive it.
 that can be held rather than a global one
 **Used by:** `src/rng.tw`, and therefore `src/trainer.tw` and
 `src/checkpoint.tw`
-**Status:** DELIVERED in twill 1.7, and loom has not taken it up. The language
-grew the better of the two answers this entry asked for: a held generator,
-`rng_open(seed)` with `rng_close`, `rng_f64`, `rng_u53`, `rng_uniform`,
-`rng_norm`, `rng_normal` and `rng_perm` drawing from it. `seed(n)` and the
-global stream are still there and are still what `src/rng.tw` calls.
+**Status:** DELIVERED in twill 1.7, and taken up by `data.split` only. The
+language grew the better of the two answers this entry asked for: a held
+generator. `rng_open(seed)` returns a handle, and `rng_u53`, `rng_f64` and
+`rng_norm` draw from it; `std/random` wraps that as an `Rng` value with
+`permutation`, `shuffle`, `normal` and the rest. This entry used to list
+`rng_uniform`, `rng_normal` and `rng_perm` among the handle draws. They take no
+handle and draw from the global stream, the same one `seed(n)` resets.
 
-The rest of this entry describes the workaround loom is still running, and it
-is now a workaround for a gap that is loom's rather than twill's.
+`data.split` now draws its permutation from a `std/random` generator of its
+own. It used to reseed the global stream, which made the split deterministic
+but left the global generator at the split's position for whatever drew next;
+`tests/data_test.tw` checks that a split no longer moves it. The epoch stream
+and `begin_init` still use `seed(n)`, because the trainer's shuffle is the
+builtin `permutation` and the initialisers in `std/nn` draw from the global
+stream, and neither takes a generator.
+
+The rest of this entry describes the workaround loom is still running for the
+epoch stream, and it is now a workaround for a gap that is loom's rather than
+twill's.
 
 A resumed run must draw the same numbers the uninterrupted run would have, and
 the generator's position after ten epochs is not recoverable from the seed alone
