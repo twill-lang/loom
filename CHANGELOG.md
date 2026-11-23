@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Take twill 1.19.1
+
+1.19.1 fixes `tensor()` on an `Arr[I64]` filled from typed variables
+(twill-lang/twill#73), so `data.split` turns `std/random`'s permutation into a
+tensor directly and the `index_tensor` workaround is deleted. This is a real
+floor, not a currency bump: `tests/data_test.tw` fails on 1.19.0. `spool.toml`,
+CI and the README install line move to 1.19.1.
+
 ### `data.split` no longer moves the global generator
 
 `split` said it did not consume the epoch stream, but it reseeded the global

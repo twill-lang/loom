@@ -84,23 +84,9 @@ struct Split {
   val: Dataset,
 }
 
-# `std/random`'s permutation as a gather index. Through F64 because twill
-# 1.19.0's tensor() refuses an Arr[I64] whose elements came from typed I64
-# variables, which is what the permutation holds (twill-lang/twill#73 fixes it;
-# once the pin has that, this is `tensor(p)`).
-fn index_tensor(p: Arr[I64]) -> Tensor {
-  let out: Arr[F64] = []
-  let i: I64 = 0
-  while i < len(p) {
-    push(out, f64(p[i]))
-    i = i + 1
-  }
-  tensor(out)
-}
-
 fn split(d: Dataset, frac: F64, base_seed: I64) -> Split {
   let g = random.new_rng(rng.derive(base_seed, "split"))
-  let order = index_tensor(random.permutation(g, d.n))
+  let order = tensor(random.permutation(g, d.n))
   let cut = i64(f64(d.n) * frac)
   if cut < 1 {
     cut = 1
