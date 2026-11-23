@@ -60,6 +60,20 @@ fn a_split_is_a_function_of_the_seed() {
   t.check("a different seed splits differently", not (a.train.x == c.train.x))
 }
 
+# The split's own doc says it does not consume the epoch stream. A split that
+# reseeded the global generator would leave it at the split's position, so
+# whatever drew next (an initialisation, an augmentation) would draw something
+# that depended on whether a split had happened.
+fn a_split_leaves_the_global_generator_where_it_was() {
+  let d = dt.dataset([[1.0], [2.0], [3.0], [4.0], [5.0], [6.0]], [0.0, 1.0, 0.0, 1.0, 0.0, 1.0])
+  seed(7)
+  let before = permutation(16)
+  seed(7)
+  dt.split(d, 0.5, 42)
+  let after = permutation(16)
+  t.check("the draw after a split is the draw without one", before == after)
+}
+
 a_short_final_batch_is_counted_not_dropped()
 a_zero_batch_size_yields_no_batches_rather_than_dividing_by_zero()
 the_last_batch_stops_at_the_last_row()
@@ -68,4 +82,5 @@ an_unshuffled_epoch_order_is_the_identity()
 an_empty_dataset_reports_no_rows()
 a_split_keeps_at_least_one_row_on_each_side()
 a_split_is_a_function_of_the_seed()
+a_split_leaves_the_global_generator_where_it_was()
 t.report("data")

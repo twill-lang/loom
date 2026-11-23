@@ -8,6 +8,7 @@ mode systems
 # train_test_split; this file does not duplicate them and the trainer expects
 # data that has already been through them.
 
+import "std/random" as random
 import "rng.tw" as rng
 
 struct Dataset {
@@ -71,17 +72,35 @@ fn take(d: Dataset, order: Tensor, lo: I64, hi: I64) -> Batch {
   Batch { x: gather(d.x, idx), y: gather(d.y, idx), rows: hi - lo }
 }
 
-# A deterministic split that does not consume the epoch stream. It reseeds from
-# a tag derived off the base seed, so adding a validation split does not shift
-# the batch orders of a run that previously had none.
+# A deterministic split that does not touch the global stream. Its permutation
+# comes from a generator of its own, seeded from a tag derived off the base
+# seed, so adding a validation split does not shift the batch orders of a run
+# that previously had none, and it does not move whatever draws next. It used
+# to reseed the global generator, which made the split itself deterministic but
+# left the global stream at the split's position for the next caller; twill's
+# held generators (`std/random`, loom's docs/needs.md entry 6) remove that.
 struct Split {
   train: Dataset,
   val: Dataset,
 }
 
+# `std/random`'s permutation as a gather index. Through F64 because twill
+# 1.19.0's tensor() refuses an Arr[I64] whose elements came from typed I64
+# variables, which is what the permutation holds (twill-lang/twill#73 fixes it;
+# once the pin has that, this is `tensor(p)`).
+fn index_tensor(p: Arr[I64]) -> Tensor {
+  let out: Arr[F64] = []
+  let i: I64 = 0
+  while i < len(p) {
+    push(out, f64(p[i]))
+    i = i + 1
+  }
+  tensor(out)
+}
+
 fn split(d: Dataset, frac: F64, base_seed: I64) -> Split {
-  seed(rng.derive(base_seed, "split"))
-  let order = permutation(d.n)
+  let g = random.new_rng(rng.derive(base_seed, "split"))
+  let order = index_tensor(random.permutation(g, d.n))
   let cut = i64(f64(d.n) * frac)
   if cut < 1 {
     cut = 1
